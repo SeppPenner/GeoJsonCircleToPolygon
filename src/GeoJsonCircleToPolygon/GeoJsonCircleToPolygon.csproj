@@ -10,7 +10,7 @@
 	<Authors>SeppPenner</Authors>
     <Company>Hämmer Electronics</Company>
     <Copyright>Copyright © Hämmer Electronics</Copyright>
-	<Description>GeoJsonCircleToPolygon is an to generate GeoJSON representations of circles to polygon.</Description>
+	<Description>GeoJsonCircleToPolygon is an to generate GeoJSON representations of circles to polygon and a fork of https://github.com/gabzim/circle-to-polygon ported to C#.</Description>
 	<PackageTags>c# geojson geo json csharp</PackageTags>
 	<PackageProjectUrl>https://www.nuget.org/packages/HaemmerElectronics.SeppPenner.GeoJsonCircleToPolygon/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/SeppPenner/GeoJsonCircleToPolygon</RepositoryUrl>
