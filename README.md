@@ -3,7 +3,7 @@ GeoJsonCircleToPolygon
 
 GeoJsonCircleToPolygon is an to generate GeoJSON representations of circles to polygon and a fork of https://github.com/gabzim/circle-to-polygon ported to C#.
 
-[![Build status](https://ci.appveyor.com/api/projects/status/a3ptt999etgpfutv?svg=true)](https://ci.appveyor.com/project/SeppPenner/GeoJsonCircleToPolygon)
+[![Build status](https://ci.appveyor.com/api/projects/status/g97r2ruunhxqphtu?svg=true)](https://ci.appveyor.com/project/SeppPenner/geojsoncircletopolygon)
 [![GitHub issues](https://img.shields.io/github/issues/SeppPenner/GeoJsonCircleToPolygon.svg)](https://github.com/SeppPenner/GeoJsonCircleToPolygon/issues)
 [![GitHub forks](https://img.shields.io/github/forks/SeppPenner/GeoJsonCircleToPolygon.svg)](https://github.com/SeppPenner/GeoJsonCircleToPolygon/network)
 [![GitHub stars](https://img.shields.io/github/stars/SeppPenner/GeoJsonCircleToPolygon.svg)](https://github.com/SeppPenner/GeoJsonCircleToPolygon/stargazers)
@@ -25,13 +25,20 @@ GeoJsonCircleToPolygon is an to generate GeoJSON representations of circles to p
 public void Test()
 {
     // For decimals:
-    var coordinates = new decimal[] { 173.283966m, -41.270634m };
-    var result = CircleToPolygonHelperDecimal.GetPolygonFromCircle(coordinates, 200000, 32);
-    var result2 = CircleToPolygonHelperDecimal.GetGeoJsonPolygonFromCircle(coordinates, 200000, 32);
+    var coordinatesDecimal = new decimal[] { 173.283966m, -41.270634m };
+    var resultDecimal = CircleToPolygonHelperDecimal.GetPolygonFromCircle(coordinatesDecimal, 200000, 32);
+    // For usage in the GeoJSON format.
+    var featureCollectionDecimal = new GeoJsonFeatureCollectionDecimal();
+    featureCollectionDecimal.AddCoordinates(resultDecimal);
+    var geoJsonDecimal = featureCollectionDecimal.ToString();
+    // -----------------------------------------------------------
 	// For doubles:
-	var coordinates = new decimal[] { 173.283966m, -41.270634m };
-    var result = CircleToPolygonHelperDouble.GetPolygonFromCircle(coordinates, 200000, 32);
-    var result2 = CircleToPolygonHelperDouble.GetGeoJsonPolygonFromCircle(coordinates, 200000, 32);
+	var coordinatesDouble = new double[] { 173.283966m, -41.270634m };
+    var resultDouble = CircleToPolygonHelperDouble.GetPolygonFromCircle(coordinatesDouble, 200000, 32);
+    // For usage in the GeoJSON format.
+    var featureCollectionDouble = new GeoJsonFeatureCollectionDouble();
+    featureCollectionDouble.AddCoordinates(resultDouble);
+    var geoJsonDouble = featureCollectionDouble.ToString();
 }
 ```
 

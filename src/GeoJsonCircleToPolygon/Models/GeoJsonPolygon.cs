@@ -1,18 +1,19 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="GeoJsonCircleDecimal.cs" company="Hämmer Electronics">
+// <copyright file="GeoJsonPolygon.cs" company="Hämmer Electronics">
 //   Copyright (c) All rights reserved.
 // </copyright>
 // <summary>
-//   A GeoJSON circle representation (For decimal).
+//   A GeoJson polygon.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace GeoJsonCircleToPolygon;
+namespace GeoJsonCircleToPolygon.Models;
 
 /// <summary>
-/// A GeoJSON circle representation (For decimal).
+/// A GeoJson polygon.
 /// </summary>
-public sealed record class GeoJsonCircleDecimal
+/// <typeparam name="T">The type parameter.</typeparam>
+public sealed record class GeoJsonPolygon<T> where T: struct
 {
     /// <summary>
     /// Gets or sets the type.
@@ -24,5 +25,5 @@ public sealed record class GeoJsonCircleDecimal
     /// Gets or sets the coordinates.
     /// </summary>
     [JsonPropertyName("coordinates")]
-    public List<List<decimal[]>> Coordinates { get; init; } = new();
+    public List<List<T[]>> Coordinates { get; init; } = new();
 }

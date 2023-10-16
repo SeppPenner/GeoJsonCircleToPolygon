@@ -63,7 +63,6 @@ public class GeoJsonTestsDecimal
     {
         var coordinates = new decimal[] { 173.283966m, -41.270634m };
         var result = CircleToPolygonHelperDecimal.GetPolygonFromCircle(coordinates, 200000, 32);
-        var result2 = CircleToPolygonHelperDecimal.GetGeoJsonPolygonFromCircle(coordinates, 200000, 32);
 
         Assert.IsNotNull(result);
         var resultLines = result.Select(v => $"{v[0]}|{v[1]}").ToList();

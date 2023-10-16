@@ -17,33 +17,6 @@ namespace GeoJsonCircleToPolygon;
 public static class CircleToPolygonHelperDouble
 {
     /// <summary>
-    /// Gets the polygon string from a given circle.
-    /// </summary>
-    /// <param name="center">The center position.</param>
-    /// <param name="radiusInMeters">The radius in meters.</param>
-    /// <param name="numberOfEdges">The number of edges.</param>
-    /// <param name="bearing">The bearing.</param>
-    /// <param name="direction">The direction.</param>
-    /// <param name="earthRadius">The earth radius.</param>
-    /// <returns>The polygon string from a given circle.</returns>
-    /// <exception cref="ArgumentException">Thrown if any argument is invalid.</exception>
-    public static string GetGeoJsonPolygonFromCircle(
-        double[] center,
-        double radiusInMeters,
-        int numberOfEdges = 32,
-        int bearing = 0,
-        int direction = 1,
-        int earthRadius = 6378137)
-    {
-        var coordinates = GetPolygonFromCircle(center, radiusInMeters, numberOfEdges, bearing, direction, earthRadius);
-        var data = new GeoJsonCircleDouble
-        {
-            Coordinates = new List<List<double[]>> { coordinates }
-        };
-        return JsonSerializer.Serialize(data);
-    }
-
-    /// <summary>
     /// Gets the polygon from a given circle.
     /// </summary>
     /// <param name="center">The center position.</param>
