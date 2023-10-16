@@ -32,8 +32,8 @@ public void Test()
     featureCollectionDecimal.AddCoordinates(resultDecimal);
     var geoJsonDecimal = featureCollectionDecimal.ToString();
     // -----------------------------------------------------------
-	// For doubles:
-	var coordinatesDouble = new double[] { 173.283966m, -41.270634m };
+    // For doubles:
+    var coordinatesDouble = new double[] { 173.283966m, -41.270634m };
     var resultDouble = CircleToPolygonHelperDouble.GetPolygonFromCircle(coordinatesDouble, 200000, 32);
     // For usage in the GeoJSON format.
     var featureCollectionDouble = new GeoJsonFeatureCollectionDouble();
