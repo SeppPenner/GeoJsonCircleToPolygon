@@ -42,6 +42,17 @@ public void Test()
 }
 ```
 
+## Parameters
+* `center`: The center coordinates: Array of length 2 or 3 (Required)
+    * First element: Longitude (Required)
+    * Second element: Latitude (Required)
+    * Third element: Altitude (Ignored)
+* `radiusInMeters`: Radius in meters (Required)
+* `numberOfEdges`: The number of edges (Defaults to 32)
+* `bearing`: How many degrees the circle should be rotated which is most noticeable for "circles" with few edges (Defaults to 0)
+* `direction`: The direction of the circle (1 means right-hand-rule, -1 is opposite) (Defaults to 1)
+* `earthRadius`: The earth radius (Defaults to 6378137)
+
 The project can be found on [nuget](https://www.nuget.org/packages/HaemmerElectronics.SeppPenner.GeoJsonCircleToPolygon/).
 
 ## Install
