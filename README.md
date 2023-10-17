@@ -1,7 +1,7 @@
 GeoJsonCircleToPolygon
 ====================================
 
-GeoJsonCircleToPolygon is an to generate GeoJSON representations of circles to polygon and a fork of https://github.com/gabzim/circle-to-polygon ported to C#.
+GeoJsonCircleToPolygon is an to generate GeoJSON representations of circles to polygon and a fork of https://github.com/gabzim/circle-to-polygon ported to C#. Special thanks to Gabriel Zimmermann, Johannes Jarbratt and Jan Žák for the original work.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/g97r2ruunhxqphtu?svg=true)](https://ci.appveyor.com/project/SeppPenner/geojsoncircletopolygon)
 [![GitHub issues](https://img.shields.io/github/issues/SeppPenner/GeoJsonCircleToPolygon.svg)](https://github.com/SeppPenner/GeoJsonCircleToPolygon/issues)
@@ -53,6 +53,10 @@ public void Test()
 * `direction`: The direction of the circle (1 means right-hand-rule, -1 is opposite) (Defaults to 1)
 * `earthRadius`: The earth radius (Defaults to 6378137)
 
+## Disclaimers
+- A circle whose edge cross longitude edges (-180 or 180) or a latitude edge (-90 or 90) will contain coordinate points that are outside the standardized coordinates (eg: [182, 23]). This is because there are two ways to represent a line going from [179, x] to [181, y]. One way is simply writing it as [[179, x], [182, y]] while the other is to write it as a multi-polygon. There is a plan to support multi-polygons but it has not yet been implemented.
+
+## NuGet
 The project can be found on [nuget](https://www.nuget.org/packages/HaemmerElectronics.SeppPenner.GeoJsonCircleToPolygon/).
 
 ## Install
