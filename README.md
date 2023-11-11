@@ -1,7 +1,7 @@
 GeoJsonCircleToPolygon
 ====================================
 
-GeoJsonCircleToPolygon is an to generate GeoJSON representations of circles to polygon and a fork of https://github.com/gabzim/circle-to-polygon ported to C#. Special thanks to Gabriel Zimmermann, Johannes Jarbratt and Jan Žák for the original work.
+GeoJsonCircleToPolygon  is a library to generate GeoJSON representations of circles to polygon and a fork of https://github.com/gabzim/circle-to-polygon ported to C#. Special thanks to Gabriel Zimmermann, Johannes Jarbratt and Jan Žák for the original work.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/g97r2ruunhxqphtu?svg=true)](https://ci.appveyor.com/project/SeppPenner/geojsoncircletopolygon)
 [![GitHub issues](https://img.shields.io/github/issues/SeppPenner/GeoJsonCircleToPolygon.svg)](https://github.com/SeppPenner/GeoJsonCircleToPolygon/issues)
