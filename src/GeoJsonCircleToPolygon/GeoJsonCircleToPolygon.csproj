@@ -16,7 +16,7 @@
         <RepositoryUrl>https://github.com/SeppPenner/GeoJsonCircleToPolygon</RepositoryUrl>
         <PackageIcon>Icon.png</PackageIcon>
         <RepositoryType>Github</RepositoryType>
-        <PackageReleaseNotes>Version 1.0.2.0 (2023-11-13): Updated NuGet packages, smaller project changes.</PackageReleaseNotes>
+        <PackageReleaseNotes>Version 1.0.3.0 (2023-12-07): Updated NuGet packages, Added support for Net8.0.</PackageReleaseNotes>
         <PackageLicenseFile>License.txt</PackageLicenseFile>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
