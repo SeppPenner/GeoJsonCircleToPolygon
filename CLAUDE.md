@@ -56,7 +56,9 @@ dotnet build src/GeoJsonCircleToPolygon.sln
 dotnet test src/GeoJsonCircleToPolygon.sln
 ```
 
-- The library multi-targets `net8.0;net9.0`, the test project builds for `net9.0` only. No
+- The library multi-targets `net8.0;net10.0`, the test project builds for `net10.0` only, so the
+  `net8.0` assets are compiled but never executed by a test run. `net9.0` was dropped because it is
+  out of support, the sibling repository `CSharpLanguageManager` did the same. No
   `RuntimeIdentifiers`, nothing in the code is platform specific.
 - All build properties live directly in the two `.csproj` files and are duplicated there. There is
   **no** `Directory.Build.props` in this repository, unlike the sibling repository
@@ -64,7 +66,10 @@ dotnet test src/GeoJsonCircleToPolygon.sln
 - `TreatWarningsAsErrors` is enabled in both projects, so every warning breaks the build, NuGet
   warnings (`NU****`) from restore included. A clean build reports zero warnings, keep it that way.
 - `NU1803` (HTTP source usage during restore) is the one warning suppressed via `NoWarn`. Fix
-  warnings instead of extending that list.
+  warnings instead of extending that list. `NuGetAudit` and `NuGetAuditMode=all` are on, so a
+  vulnerable transitive package fails the build too.
+- `GenerateDocumentationFile` is on in the library, so the `.xml` file ships inside the package and a
+  missing XML comment breaks the build through `CS1591`.
 - Versions come from GitVersion.MsBuild out of the git tags, for example `1.0.6-3` for the third
   commit after tag `1.0.5`. Never edit a version property or an assembly version by hand.
 - Restore needs nuget.org. If a private feed is configured globally on the machine and answers 404
