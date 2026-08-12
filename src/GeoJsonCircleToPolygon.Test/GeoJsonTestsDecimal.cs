@@ -61,12 +61,160 @@ public class GeoJsonTestsDecimal
     [TestMethod]
     public void TestGeoJsonResultFromExample()
     {
-        var coordinates = new decimal[] { 173.283966m, -41.270634m };
-        var result = CircleToPolygonHelperDecimal.GetPolygonFromCircle(coordinates, 200000, 32);
+        var coordinates = TestDataProvider.GetCenterDecimal();
+        var result = CircleToPolygonHelperDecimal.GetPolygonFromCircle(coordinates, TestDataProvider.RadiusInMeters, TestDataProvider.NumberOfEdges);
 
         Assert.IsNotNull(result);
         var resultLines = result.Select(v => $"{v[0]}|{v[1]}").ToList();
         var expectedResultLines = expectedResult.Select(v => $"{v[0]}|{v[1]}").ToList();
         CollectionAssert.AreEqual(expectedResultLines, resultLines);
+    }
+
+    /// <summary>
+    /// Checks whether the returned ring is closed, so that the last position repeats the first one.
+    /// </summary>
+    [TestMethod]
+    public void ThePolygonIsClosed()
+    {
+        var result = CircleToPolygonHelperDecimal.GetPolygonFromCircle(TestDataProvider.GetCenterDecimal(), TestDataProvider.RadiusInMeters, TestDataProvider.NumberOfEdges);
+
+        CollectionAssert.AreEqual(result[0], result[^1], "The ring does not end where it started.");
+    }
+
+    /// <summary>
+    /// Checks whether the number of returned positions is the number of edges plus the repeated first position.
+    /// </summary>
+    /// <param name="numberOfEdges">The number of edges.</param>
+    [TestMethod]
+    [DataRow(3)]
+    [DataRow(8)]
+    [DataRow(32)]
+    public void TheNumberOfPositionsIsTheNumberOfEdgesPlusOne(int numberOfEdges)
+    {
+        var result = CircleToPolygonHelperDecimal.GetPolygonFromCircle(TestDataProvider.GetCenterDecimal(), TestDataProvider.RadiusInMeters, numberOfEdges);
+
+        Assert.AreEqual(numberOfEdges + 1, result.Count);
+    }
+
+    /// <summary>
+    /// Checks whether the number of edges defaults to 32, the value the Readme documents.
+    /// </summary>
+    [TestMethod]
+    public void TheNumberOfEdgesDefaultsToThirtyTwo()
+    {
+        var result = CircleToPolygonHelperDecimal.GetPolygonFromCircle(TestDataProvider.GetCenterDecimal(), TestDataProvider.RadiusInMeters);
+
+        Assert.AreEqual(TestDataProvider.NumberOfEdges + 1, result.Count);
+    }
+
+    /// <summary>
+    /// Checks whether every position of the polygon really lies at the given radius around the center. The distance
+    /// is measured in <see cref="double"/> because that is precise enough for a tolerance of a millimeter.
+    /// </summary>
+    [TestMethod]
+    public void EveryPositionLiesAtTheGivenRadius()
+    {
+        var center = TestDataProvider.GetCenterDecimal();
+        var centerAsDouble = TestDataProvider.GetCenterDouble();
+        var expectedRadius = (double)TestDataProvider.RadiusInMeters;
+        var result = CircleToPolygonHelperDecimal.GetPolygonFromCircle(center, TestDataProvider.RadiusInMeters, TestDataProvider.NumberOfEdges);
+
+        foreach (var position in result)
+        {
+            var distance = TestDataProvider.GetDistanceInMeters(centerAsDouble, [(double)position[0], (double)position[1]]);
+            Assert.AreEqual(expectedRadius, distance, 0.001, $"The position {position[0]}|{position[1]} is not on the circle.");
+        }
+    }
+
+    /// <summary>
+    /// Checks whether the decimal helper and the double helper agree within the precision of a double. This is the
+    /// test that would catch a change made to only one of the two copies of the algorithm.
+    /// </summary>
+    [TestMethod]
+    public void TheDecimalResultMatchesTheDoubleResult()
+    {
+        var resultDecimal = CircleToPolygonHelperDecimal.GetPolygonFromCircle(TestDataProvider.GetCenterDecimal(), TestDataProvider.RadiusInMeters, TestDataProvider.NumberOfEdges);
+        var resultDouble = CircleToPolygonHelperDouble.GetPolygonFromCircle(TestDataProvider.GetCenterDouble(), TestDataProvider.RadiusInMeters, TestDataProvider.NumberOfEdges);
+
+        Assert.AreEqual(resultDouble.Count, resultDecimal.Count);
+
+        for (var i = 0; i < resultDouble.Count; i++)
+        {
+            Assert.AreEqual(resultDouble[i][0], (double)resultDecimal[i][0], 1e-9, "The longitudes of the two helpers differ.");
+            Assert.AreEqual(resultDouble[i][1], (double)resultDecimal[i][1], 1e-9, "The latitudes of the two helpers differ.");
+        }
+    }
+
+    /// <summary>
+    /// Checks whether fewer than three edges are reported with the parameter name of the number of edges.
+    /// </summary>
+    [TestMethod]
+    public void TooFewEdgesThrowAnArgumentException()
+    {
+        var exception = Assert.ThrowsExactly<ArgumentException>(() => CircleToPolygonHelperDecimal.GetPolygonFromCircle(TestDataProvider.GetCenterDecimal(), TestDataProvider.RadiusInMeters, 2));
+
+        Assert.AreEqual("numberOfEdges", exception.ParamName);
+        StringAssert.StartsWith(exception.Message, "The number of edges must be at least 3.");
+    }
+
+    /// <summary>
+    /// Checks whether a radius of zero or less is reported with the parameter name of the radius.
+    /// </summary>
+    /// <param name="radiusInMeters">The radius in meters.</param>
+    [TestMethod]
+    [DataRow(0)]
+    [DataRow(-1)]
+    public void ANonPositiveRadiusThrowsAnArgumentException(int radiusInMeters)
+    {
+        var exception = Assert.ThrowsExactly<ArgumentException>(() => CircleToPolygonHelperDecimal.GetPolygonFromCircle(TestDataProvider.GetCenterDecimal(), radiusInMeters, TestDataProvider.NumberOfEdges));
+
+        Assert.AreEqual("radiusInMeters", exception.ParamName);
+        StringAssert.StartsWith(exception.Message, "The radius must be positive.");
+    }
+
+    /// <summary>
+    /// Checks whether a center position with anything but two elements is rejected. Three elements are rejected
+    /// too, the altitude the original JavaScript library ignores is not accepted here.
+    /// </summary>
+    [TestMethod]
+    public void ACenterWithoutExactlyTwoElementsThrowsAnArgumentException()
+    {
+        var oneElement = Assert.ThrowsExactly<ArgumentException>(() => CircleToPolygonHelperDecimal.GetPolygonFromCircle([173.283966m], TestDataProvider.RadiusInMeters, TestDataProvider.NumberOfEdges));
+        var threeElements = Assert.ThrowsExactly<ArgumentException>(() => CircleToPolygonHelperDecimal.GetPolygonFromCircle([173.283966m, -41.270634m, 100m], TestDataProvider.RadiusInMeters, TestDataProvider.NumberOfEdges));
+
+        Assert.AreEqual("center", oneElement.ParamName);
+        Assert.AreEqual("center", threeElements.ParamName);
+        StringAssert.StartsWith(oneElement.Message, "The center coordinates must have exactly two elements.");
+        StringAssert.StartsWith(threeElements.Message, "The center coordinates must have exactly two elements.");
+    }
+
+    /// <summary>
+    /// Checks whether a longitude outside of -180 to 180 is reported.
+    /// </summary>
+    /// <param name="longitude">The longitude.</param>
+    [TestMethod]
+    [DataRow(180.1)]
+    [DataRow(-180.1)]
+    public void ALongitudeOutOfRangeThrowsAnArgumentException(double longitude)
+    {
+        var exception = Assert.ThrowsExactly<ArgumentException>(() => CircleToPolygonHelperDecimal.GetPolygonFromCircle([(decimal)longitude, -41.270634m], TestDataProvider.RadiusInMeters, TestDataProvider.NumberOfEdges));
+
+        Assert.AreEqual("center", exception.ParamName);
+        StringAssert.StartsWith(exception.Message, "The longitude must be between -180 and 180.");
+    }
+
+    /// <summary>
+    /// Checks whether a latitude outside of -90 to 90 is reported.
+    /// </summary>
+    /// <param name="latitude">The latitude.</param>
+    [TestMethod]
+    [DataRow(90.1)]
+    [DataRow(-90.1)]
+    public void ALatitudeOutOfRangeThrowsAnArgumentException(double latitude)
+    {
+        var exception = Assert.ThrowsExactly<ArgumentException>(() => CircleToPolygonHelperDecimal.GetPolygonFromCircle([173.283966m, (decimal)latitude], TestDataProvider.RadiusInMeters, TestDataProvider.NumberOfEdges));
+
+        Assert.AreEqual("center", exception.ParamName);
+        StringAssert.StartsWith(exception.Message, "The latitude must be between -90 and 90.");
     }
 }

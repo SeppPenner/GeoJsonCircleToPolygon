@@ -36,8 +36,19 @@ Layout inside `src/GeoJsonCircleToPolygon`:
 
 Layout inside `src/GeoJsonCircleToPolygon.Test`:
 
-- `GeoJsonTestsDouble.cs` and `GeoJsonTestsDecimal.cs`: one test each, the polygon of the Readme
-  example against a hardcoded expected result of 33 coordinate pairs.
+- `GeoJsonTestsDouble.cs` and `GeoJsonTestsDecimal.cs`: the polygon of the Readme example against a
+  hardcoded expected result of 33 coordinate pairs, the closed ring, the number of positions, the
+  default number of edges, the distance of every position to the center, the bearing, the direction
+  and one test per rejected argument. `GeoJsonTestsDecimal` additionally compares both helpers
+  against each other, which is the test that catches a change made to only one of the two copies of
+  the algorithm.
+- `GeoJsonFeatureCollectionTests.cs`: the serialized GeoJSON structure, the second `AddCoordinates`
+  call that adds a ring instead of a feature, the `ToString` of the two derived collections, the
+  empty collection and the Readme sample compiled as a test.
+- `DecimalMathTests.cs`: `Sin`, `Cos`, `Asin`, `Atan2`, `Sqrt`, `PowerN` and the constants against
+  `System.Math`, plus the three exceptions.
+- `TestDataProvider.cs`: the center, the radius and the number of edges all test classes use, the
+  values of the Readme example, plus the haversine distance the radius checks need.
 - `GlobalUsings.cs`: all usings of the test project.
 
 Repository root: `README.md` (the only user documentation, with the usage sample, the parameter list
@@ -75,9 +86,15 @@ dotnet test src/GeoJsonCircleToPolygon.sln
 - Restore needs nuget.org. If a private feed is configured globally on the machine and answers 404
   for public packages, restore fails with `NU1301`. Then build with an explicit source:
   `dotnet build src/GeoJsonCircleToPolygon.sln --source https://api.nuget.org/v3/index.json`.
-- Tests are MSTest, in the single test project `src/GeoJsonCircleToPolygon.Test`. `dotnet test` runs
-  2 tests, they need no network and no fixture outside the repository. Never claim a test run
-  happened without running it.
+- Tests are MSTest, in the single test project `src/GeoJsonCircleToPolygon.Test`, which follows the
+  same package set as the sibling repository `AesCryptFromStreamExample`: `Microsoft.NET.Test.Sdk`,
+  `MSTest.TestAdapter`, `MSTest.TestFramework`, `coverlet.collector` and `GitVersion.MsBuild`, plus
+  `JunitXml.TestLogger` for the external build. `dotnet test` runs 65 tests, they need no network, no
+  file system and no fixture outside the repository, and a run leaves the working tree untouched.
+  Never claim a test run happened without running it.
+- The MSTest analyzers are active and their diagnostics are errors like every other warning.
+  `MSTEST0025` fires when both sides of an `Assert.AreEqual` are constants, which is why
+  `DecimalMathTests` compares its constants through a local variable.
 
 ## Code conventions
 

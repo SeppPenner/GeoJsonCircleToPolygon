@@ -16,7 +16,7 @@
         <RepositoryUrl>https://github.com/SeppPenner/GeoJsonCircleToPolygon</RepositoryUrl>
         <PackageIcon>Icon.png</PackageIcon>
         <RepositoryType>Github</RepositoryType>
-        <PackageReleaseNotes>Version 1.0.6.0 (2026-08-12): Removed support for Net9.0 as it is out of support, added support for Net10.0, updated NuGet packages, fixed the swapped message and parameter name of the argument validation exceptions, fixed the Readme sample, added the XML documentation file to the package.</PackageReleaseNotes>
+        <PackageReleaseNotes>Version 1.0.6.0 (2026-08-12): Removed support for Net9.0 as it is out of support, added support for Net10.0, updated NuGet packages, fixed the swapped message and parameter name of the argument validation exceptions, added the default of 32 edges to the double helper, fixed the Readme sample, extended the tests, added the XML documentation file to the package.</PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>
