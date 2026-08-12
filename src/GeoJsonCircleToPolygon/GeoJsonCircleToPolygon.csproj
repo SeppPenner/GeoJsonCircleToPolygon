@@ -10,13 +10,13 @@
         <Authors>SeppPenner</Authors>
         <Company>Hämmer Electronics</Company>
         <Copyright>Copyright © Hämmer Electronics</Copyright>
-        <Description>GeoJsonCircleToPolygon is an to generate GeoJSON representations of circles to polygon and a fork of https://github.com/gabzim/circle-to-polygon ported to C#.</Description>
+        <Description>GeoJsonCircleToPolygon is a library to convert circles to polygons and to generate GeoJSON representations of them, a fork of https://github.com/gabzim/circle-to-polygon ported to C#.</Description>
         <PackageTags>c# geojson geo json csharp</PackageTags>
         <PackageProjectUrl>https://www.nuget.org/packages/HaemmerElectronics.SeppPenner.GeoJsonCircleToPolygon/</PackageProjectUrl>
         <RepositoryUrl>https://github.com/SeppPenner/GeoJsonCircleToPolygon</RepositoryUrl>
         <PackageIcon>Icon.png</PackageIcon>
         <RepositoryType>Github</RepositoryType>
-        <PackageReleaseNotes>Version 1.0.6.0 (2026-08-12): Removed support for Net9.0 as it is out of support, added support for Net10.0, updated NuGet packages, fixed the swapped message and parameter name of the argument validation exceptions, added the default of 32 edges to the double helper, fixed the Readme sample, extended the tests, added the XML documentation file to the package.</PackageReleaseNotes>
+        <PackageReleaseNotes>Version 1.0.7.0 (2026-08-12): Merged the duplicated circle calculation into one generic implementation, the public API is unchanged, fixed the broken package description.</PackageReleaseNotes>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <EmbedUntrackedSources>true</EmbedUntrackedSources>

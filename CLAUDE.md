@@ -19,10 +19,14 @@ One solution `src/GeoJsonCircleToPolygon.sln` with exactly two projects:
 Layout inside `src/GeoJsonCircleToPolygon`:
 
 - `CircleToPolygonHelperDouble.cs` and `CircleToPolygonHelperDecimal.cs`: the public entry points,
-  one static class each, `GetPolygonFromCircle` validates its arguments and walks the edges. The
-  private helpers `GetRadians`, `GetDegrees` and `GetOffsetCoordinates` do one thing each, keep new
-  logic in that shape. Both files hold the same calculation, once for `double` and once for
-  `decimal`.
+  one static class each. Both are wrappers of exactly one line over the generic core, they exist
+  because they are the published API and because a caller should not have to name a math strategy.
+- `CircleToPolygonHelper.cs`: the `internal` generic core, `GetPolygonFromCircle<T, TMath>` validates
+  its arguments and walks the edges. The private helpers `GetRadians`, `GetDegrees` and
+  `GetOffsetCoordinates` do one thing each, keep new logic in that shape. This is the only place the
+  calculation exists.
+- `ICircleMath.cs` plus `DoubleCircleMath.cs` and `DecimalCircleMath.cs`: the trigonometry the core
+  needs, once mapped to `System.Math` and once to `DecimalMath`, all three `internal`.
 - `DecimalMath.cs`: a stand-in for `System.Math` in `decimal`, because `Math` only knows `double`.
   Taylor series with a `MaximumIterations` cap of 100. Only `Asin`, `Atan2`, `Sin`, `Cos` and
   `Sqrt` are actually used by the helper, the rest of the class comes from the original source.
@@ -74,6 +78,9 @@ dotnet test src/GeoJsonCircleToPolygon.sln
 - All build properties live directly in the two `.csproj` files and are duplicated there. There is
   **no** `Directory.Build.props` in this repository, unlike the sibling repository
   `CSharpLanguageManager`.
+- `net8.0` is the floor. The generic core needs `INumber<T>` and `static abstract` interface members,
+  both of which arrived with .NET 7 and C# 11. A target below that would mean bringing the two copies
+  of the algorithm back.
 - `TreatWarningsAsErrors` is enabled in both projects, so every warning breaks the build, NuGet
   warnings (`NU****`) from restore included. A clean build reports zero warnings, keep it that way.
 - `NU1803` (HTTP source usage during restore) is the one warning suppressed via `NoWarn`. Fix
@@ -123,12 +130,23 @@ Follow the surrounding code, it is consistent throughout every file:
 
 Do not silently "clean up" these, they are existing behaviour:
 
-- **Everything exists twice, for `double` and for `decimal`.** `CircleToPolygonHelperDouble` and
-  `CircleToPolygonHelperDecimal` are the same algorithm with a different numeric type, and
-  `GeoJsonTestsDouble` and `GeoJsonTestsDecimal` mirror each other the same way. A change to the
-  calculation has to be made in both files, and both test classes carry their own expected result.
-  The `decimal` variant is not just more precise, it is much slower, because `DecimalMath` evaluates
-  series where the `double` variant calls a single intrinsic.
+- **The calculation exists once, the entry points twice.** Up to version 1.0.6.0 the algorithm was
+  copied into both public helpers, which is how the same swapped `ArgumentException` argument ended
+  up in the repository ten times. Since 1.0.7.0 both helpers forward to the generic
+  `CircleToPolygonHelper`. The two test classes still mirror each other and carry their own expected
+  results, and `GeoJsonTestsDecimal` compares both helpers against each other. The `decimal` variant
+  is not just more precise, it is much slower, because `DecimalMath` evaluates series where the
+  `double` variant calls a single intrinsic.
+- **`ICircleMath<T>` exists because `decimal` has no trigonometry.** `INumber<T>` only brings the
+  arithmetic, and `decimal` implements neither `ITrigonometricFunctions<T>` nor
+  `IFloatingPointConstants<T>`, so `Sin`, `Cos`, `Asin`, `Atan2` and `Pi` come in through an
+  interface with `static abstract` members. `DoubleCircleMath` and `DecimalCircleMath` are
+  `readonly struct`s and not static classes, because a static class cannot be a type argument.
+- **The order of the arithmetic in the core is load bearing.** Both test classes compare against
+  exact expected values down to the last digit, so reordering a multiplication changes the result and
+  turns them red. `T.CreateChecked(direction * 2)` keeps that multiplication in `int` and
+  `T.CreateChecked(-i)` keeps the negation there too, which is what the two former copies did through
+  their implicit conversions. Do not "simplify" those.
 - **The `ToString` overrides in the two derived collections are not redundant.** A `record`
   generates its own `ToString`, so `GeoJsonFeatureCollectionDecimal` and
   `GeoJsonFeatureCollectionDouble` would print the compiler generated record output instead of the
