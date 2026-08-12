@@ -36,7 +36,7 @@ public void Test()
     var geoJsonDecimal = featureCollectionDecimal.ToString();
     // -----------------------------------------------------------
     // For doubles:
-    var coordinatesDouble = new double[] { 173.283966m, -41.270634m };
+    var coordinatesDouble = new double[] { 173.283966, -41.270634 };
     var resultDouble = CircleToPolygonHelperDouble.GetPolygonFromCircle(coordinatesDouble, 200000, 32);
     // For usage in the GeoJSON format.
     var featureCollectionDouble = new GeoJsonFeatureCollectionDouble();
@@ -46,10 +46,9 @@ public void Test()
 ```
 
 ## Parameters
-* `center`: The center coordinates: Array of length 2 or 3 (Required)
+* `center`: The center coordinates: Array of length 2 (Required)
     * First element: Longitude (Required)
     * Second element: Latitude (Required)
-    * Third element: Altitude (Ignored)
 * `radiusInMeters`: Radius in meters (Required)
 * `numberOfEdges`: The number of edges (Defaults to 32)
 * `bearing`: How many degrees the circle should be rotated which is most noticeable for "circles" with few edges (Defaults to 0)

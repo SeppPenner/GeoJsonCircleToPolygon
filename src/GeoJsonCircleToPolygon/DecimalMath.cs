@@ -20,7 +20,7 @@ public static class DecimalMath
     public const decimal E = 2.7182818284590452353602874713526624977572470936999595749M;
 
     /// <summary>
-    ///     Represents PI.
+    ///     Represents the smallest value that is treated as a difference.
     /// </summary>
     public const decimal Epsilon = 0.0000000000000000001M;
 
@@ -559,7 +559,7 @@ public static class DecimalMath
         var cos = Cos(x);
         if (cos == Zero)
         {
-            throw new ArgumentException(nameof(x));
+            throw new ArgumentException("The tangens is not defined if the cosinus is zero.", nameof(x));
         }
 
         return Sin(x) / cos;
@@ -628,6 +628,6 @@ public static class DecimalMath
         }
 
         // Will not be reached.
-        throw new ArgumentException(nameof(x));
+        throw new ArgumentException("The sign of the sinus value cannot be determined.", nameof(x));
     }
 }

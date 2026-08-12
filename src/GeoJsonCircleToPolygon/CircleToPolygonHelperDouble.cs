@@ -30,24 +30,24 @@ public static class CircleToPolygonHelperDouble
     public static List<double[]> GetPolygonFromCircle(
         double[] center,
         double radiusInMeters,
-        int numberOfEdges,
+        int numberOfEdges = 32,
         int bearing = 0,
         int direction = 1,
         int earthRadius = 6378137)
     {
         if (numberOfEdges < 3)
         {
-            throw new ArgumentException(nameof(numberOfEdges), "The number of edges must be at least 3.");
+            throw new ArgumentException("The number of edges must be at least 3.", nameof(numberOfEdges));
         }
 
         if (radiusInMeters <= 0)
         {
-            throw new ArgumentException(nameof(radiusInMeters), "The radius must be positive.");
+            throw new ArgumentException("The radius must be positive.", nameof(radiusInMeters));
         }
 
         if (center.Length != 2)
         {
-            throw new ArgumentException(nameof(center), "The center coordinates must have exactly two elements.");
+            throw new ArgumentException("The center coordinates must have exactly two elements.", nameof(center));
         }
 
         var longitude = center[0];
@@ -55,12 +55,12 @@ public static class CircleToPolygonHelperDouble
 
         if (longitude > 180 || longitude < -180)
         {
-            throw new ArgumentException(nameof(center), "The longitude must be between -180 and 180.");
+            throw new ArgumentException("The longitude must be between -180 and 180.", nameof(center));
         }
 
         if (latitude > 90 || latitude < -90)
         {
-            throw new ArgumentException(nameof(center), "The latitude must be between -90 and 90.");
+            throw new ArgumentException("The latitude must be between -90 and 90.", nameof(center));
         }
 
         var start = GetRadians(bearing);
