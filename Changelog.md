@@ -1,6 +1,7 @@
 Change history
 --------------
 
+* **Version 1.0.8.0 (2026-11-24)** : Removed support for Net8.0 as it is out of support, added support for Net11.0, updated NuGet packages.
 * **Version 1.0.7.0 (2026-08-12)** : Merged the duplicated circle calculation into one generic implementation, the public API is unchanged, fixed the broken package description.
 * **Version 1.0.6.0 (2026-08-12)** : Removed support for Net9.0 as it is out of support, added support for Net10.0, updated NuGet packages, fixed the swapped message and parameter name of the argument validation exceptions, added the default of 32 edges to the double helper, fixed the Readme sample, extended the tests, added the XML documentation file to the package.
 * **Version 1.0.5.0 (2024-11-24)** : Removed support for Net6.0, added support for Net9.0, updated NuGet packages.
