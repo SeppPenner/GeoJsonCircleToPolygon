@@ -254,6 +254,8 @@ yet, and GitHub Packages held only 1.0.4 to 1.0.7, the older history there is in
 
 ## Git
 
+- Include the full GitHub pull request or issue URL in the body of each related commit on a `Refs:`
+  line. Use the [GitHub issue skill](.claude/skills/github-issue/SKILL.md) for issue work and closeout.
 - **Never amend a commit.** No `git commit --amend`, not for a typo in the message, not to add a
   forgotten file, not even when the commit is still local. Write a follow-up commit instead. The
   release versions come from tags on exact commits, an amended commit leaves its tag pointing at a
