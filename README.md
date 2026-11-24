@@ -17,8 +17,8 @@ GeoJsonCircleToPolygon is a library to convert circles to polygons and to genera
 [![PayPal](https://img.shields.io/badge/PayPal-00457C?logo=paypal&logoColor=white)](https://paypal.me/th070795)
 
 ## Available for
-* Net 8.0
 * Net 10.0
+* Net 11.0
 
 ## Net Core and Net Framework latest and LTS versions
 * https://dotnet.microsoft.com/download/dotnet

@@ -71,16 +71,17 @@ dotnet build src/GeoJsonCircleToPolygon.sln
 dotnet test src/GeoJsonCircleToPolygon.sln
 ```
 
-- The library multi-targets `net8.0;net10.0`, the test project builds for `net10.0` only, so the
-  `net8.0` assets are compiled but never executed by a test run. `net9.0` was dropped because it is
-  out of support, the sibling repository `CSharpLanguageManager` did the same. No
-  `RuntimeIdentifiers`, nothing in the code is platform specific.
+- The library multi-targets `net10.0;net11.0`, so building needs the .NET 11 SDK. The test project
+  builds for `net11.0` only, so the `net10.0` assets are compiled but never executed by a test run.
+  Keep the test project on the newest framework the library targets. `net9.0` was dropped because it
+  is out of support, `net8.0` after version 1.0.7.0. No `RuntimeIdentifiers`, nothing in the code is
+  platform specific.
 - All build properties live directly in the two `.csproj` files and are duplicated there. There is
   **no** `Directory.Build.props` in this repository, unlike the sibling repository
   `CSharpLanguageManager`.
-- `net8.0` is the floor. The generic core needs `INumber<T>` and `static abstract` interface members,
-  both of which arrived with .NET 7 and C# 11. A target below that would mean bringing the two copies
-  of the algorithm back.
+- .NET 7 is the technical floor. The generic core needs `INumber<T>` and `static abstract` interface
+  members, both of which arrived with .NET 7 and C# 11. A target below that would mean bringing the
+  two copies of the algorithm back.
 - `TreatWarningsAsErrors` is enabled in both projects, so every warning breaks the build, NuGet
   warnings (`NU****`) from restore included. A clean build reports zero warnings, keep it that way.
 - `NU1803` (HTTP source usage during restore) is the one warning suppressed via `NoWarn`. Fix
